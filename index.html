@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Endless Bouncing Ball</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom, #cce7ff, #e6f5ff);
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // ball properties
+    let x = 50;
+    let y = 50;
+    let dx = 4;           // horizontal speed
+    let dy = 0;           // vertical speed
+    let radius = 30;
+    let gravity = 0.4;    // gravity pull
+    let bounce = 1.01;    // >1 means it will never lose energy
+
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = "orange";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBall();
+
+      // apply gravity
+      dy += gravity;
+      y += dy;
+      x += dx;
+
+      // bounce from bottom
+      if (y + radius > canvas.height) {
+        y = canvas.height - radius;
+        dy = -dy * bounce;
+      }
+
+      // loop from right to left
+      if (x - radius > canvas.width) {
+        x = -radius;
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
